@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LunaLabs — Software studio, automatización con IA y consultoría tecnológica</title>
+<meta name="description" content="LunaLabs es un software studio que construye aplicaciones escalables, automatiza procesos con IA y te acompaña como socio tecnológico en tu evolución digital.">
+<meta name="theme-color" content="#0A0E27">
+
+<!-- Favicon: luna creciente + estrella (SVG embebido) -->
+<link rel="icon" type="image/png" href="Lunalabs-logo.png">
+<link rel="apple-touch-icon" href="Lunalabs-logo.png">
+
+<!-- Google Fonts: Sora (titulares) + Inter (cuerpo) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   0. TOKENS DE MARCA
+   Nota: el brand board indica el gris azulado como #B0BEC5 (en el brief
+   aparecía como "#B0BECS", un typo). Se usa #B0BEC5.
+   ========================================================================== */
+:root {
+  --color-primary: #1A237E;   /* Azul profundo */
+  --color-accent:  #FDD835;   /* Dorado "luz de luna" */
+  --color-matte:   #B0BEC5;   /* Gris azulado mate */
+  --color-white:   #FFFFFF;   /* Blanco suave */
+
+  --bg:        #0A0E27;       /* Cielo nocturno */
+  --bg-2:      #0E1338;
+  --ink:       #ECEFF8;       /* Texto principal sobre oscuro */
+  --ink-soft:  #B0BEC5;
+  --line:      rgba(176, 190, 197, .18);
+  --line-strong: rgba(176, 190, 197, .32);
+  --glow-gold: rgba(253, 216, 53, .38);
+  --silver:    #DDE1F3;
+
+  --font-head: "Sora", "Montserrat", "Poppins", system-ui, sans-serif;
+  --font-body: "Inter", "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --gutter: 20px;
+  --maxw: 1200px;
+  --radius: 24px;
+  --nav-h: 72px;
+}
+@media (min-width: 640px)  { :root { --gutter: 32px; } }
+@media (min-width: 1024px) { :root { --gutter: 48px; --nav-h: 80px; } }
+@media (min-width: 1440px) { :root { --maxw: 1320px; } }
+
+/* ==========================================================================
+   1. RESET Y BASE
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  background: var(--bg);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+/* Resplandor azul general del cielo nocturno */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(900px 600px at 78% -5%, rgba(26, 35, 126, .55), transparent 70%),
+    radial-gradient(700px 500px at -5% 45%, rgba(26, 35, 126, .28), transparent 70%),
+    radial-gradient(800px 600px at 105% 95%, rgba(26, 35, 126, .32), transparent 70%);
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul { margin: 0; padding: 0; list-style: none; }
+h1, h2, h3, h4, p { margin: 0; }
+h1, h2, h3, h4 { font-family: var(--font-head); color: var(--color-white); line-height: 1.12; letter-spacing: -.015em; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: 6px; }
+main, footer { position: relative; z-index: 1; }
+section { scroll-margin-top: calc(var(--nav-h) - 8px); }
+.container { width: min(100% - 2 * var(--gutter), var(--maxw)); margin-inline: auto; }
+.section { padding-block: clamp(72px, 10vw, 128px); position: relative; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Iconos lineales (sprite SVG) */
+.ico { width: 1.5em; height: 1.5em; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* ==========================================================================
+   2. CAMPO DE ESTRELLAS (generado por JS, parpadeo por CSS)
+   ========================================================================== */
+.stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.stars i {
+  position: absolute; border-radius: 50%;
+  width: var(--s); height: var(--s);
+  background: #fff; opacity: var(--o);
+  animation: twinkle var(--dur) ease-in-out var(--del) infinite;
+}
+.stars i.gold { background: var(--color-accent); box-shadow: 0 0 6px rgba(253, 216, 53, .7); }
+.stars i.big  { box-shadow: 0 0 8px 1px rgba(221, 225, 243, .55); }
+@keyframes twinkle { 0%, 100% { opacity: calc(var(--o) * .2); transform: scale(.85); } 50% { opacity: var(--o); transform: scale(1); } }
+
+/* ==========================================================================
+   3. COMPONENTES COMUNES
+   ========================================================================== */
+/* Botones */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+  padding: .95rem 1.6rem; border-radius: 999px; border: 1px solid transparent;
+  font-family: var(--font-head); font-weight: 600; font-size: .95rem; letter-spacing: .005em;
+  cursor: pointer; white-space: nowrap;
+  transition: transform .25s ease, box-shadow .3s ease, background .3s ease, border-color .3s ease, color .3s ease;
+}
+.btn .ico { width: 1.15em; height: 1.15em; transition: transform .25s ease; }
+.btn:hover .ico { transform: translateX(3px); }
+.btn--gold { background: var(--color-accent); color: #0A0E27; box-shadow: 0 6px 22px rgba(253, 216, 53, .18); }
+.btn--gold:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px var(--color-accent), 0 10px 34px var(--glow-gold); }
+.btn--ghost { background: rgba(255, 255, 255, .03); color: var(--color-white); border-color: var(--line-strong); }
+.btn--ghost:hover { border-color: var(--color-accent); color: var(--color-accent); box-shadow: 0 0 24px rgba(253, 216, 53, .16); transform: translateY(-2px); }
+.btn--sm { padding: .7rem 1.2rem; font-size: .85rem; }
+
+/* Tarjetas glass */
+.card {
+  position: relative;
+  background: linear-gradient(160deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .02));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 50px rgba(3, 5, 20, .45);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  transition: border-color .35s ease, box-shadow .35s ease, transform .35s ease;
+}
+.card--hover:hover { border-color: rgba(253, 216, 53, .55); box-shadow: 0 0 0 1px rgba(253, 216, 53, .15), 0 18px 60px rgba(3, 5, 20, .55), 0 0 40px rgba(253, 216, 53, .1); transform: translateY(-4px); }
+
+/* Encabezados de sección */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: .7rem;
+  font-family: var(--font-head); font-weight: 600; font-size: .75rem;
+  text-transform: uppercase; letter-spacing: .22em; color: var(--color-accent);
+}
+.eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--color-accent); opacity: .8; }
+.section-head { max-width: 720px; margin-bottom: clamp(40px, 6vw, 72px); }
+.section-head--center { margin-inline: auto; text-align: center; }
+.section-head--center .eyebrow::after { content: ""; width: 28px; height: 1px; background: var(--color-accent); opacity: .8; }
+.section-title { font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 700; margin-top: 1rem; }
+.section-lead { margin-top: 1.1rem; font-size: 1.05rem; max-width: 60ch; }
+.section-head--center .section-lead { margin-inline: auto; }
+.grad-text { background: linear-gradient(95deg, #7986CB 0%, #DDE1F3 55%, #FFF8D6 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.gold { color: var(--color-accent); }
+
+/* Separador con luna */
+.divider { display: flex; align-items: center; gap: 1.2rem; width: min(100% - 2 * var(--gutter), 520px); margin-inline: auto; color: var(--color-accent); }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--line-strong)); }
+.divider::after { transform: scaleX(-1); }
+.divider .ico { width: 22px; height: 22px; fill: currentColor; stroke: none; filter: drop-shadow(0 0 8px var(--glow-gold)); }
+
+/* Marca de agua: luna y órbitas */
+.watermark { position: absolute; pointer-events: none; opacity: .06; object-fit: contain; filter: brightness(0) invert(1); }
+.orbits { position: absolute; pointer-events: none; fill: none; stroke: var(--color-matte); }
+
+/* Animación de entrada al hacer scroll */
+.js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.2, .7, .2, 1), transform .9s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--d, 0s); }
+.js .reveal.is-visible { opacity: 1; transform: none; }
+
+/* Flotación suave */
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes float-sm { 0%, 100% { transform: translate(-50%, -50%) translateY(0); } 50% { transform: translate(-50%, -50%) translateY(-8px); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes flow { to { stroke-dashoffset: -20; } }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(253, 216, 53, .5); } 50% { box-shadow: 0 0 0 7px rgba(253, 216, 53, 0); } }
+
+/* ==========================================================================
+   4. LOGO (lockup: marca + texto)
+   ========================================================================== */
+.brand { display: inline-flex; align-items: center; gap: .6rem; }
+.brand__mark { width: 40px; height: 40px; object-fit: contain; /* el PNG es azul oscuro: halo claro para que se lea sobre el cielo nocturno */ filter: drop-shadow(0 0 1px rgba(255, 255, 255, .55)) drop-shadow(0 0 10px rgba(221, 225, 243, .35)); }
+.brand__text { font-family: var(--font-head); font-size: 1.25rem; letter-spacing: .06em; text-transform: uppercase; line-height: 1; }
+.brand__text b { font-weight: 800; background: linear-gradient(100deg, #5C6BC0, #E8EAF6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.brand__text span { font-weight: 300; color: #ECEFF1; }
+
+/* ==========================================================================
+   5. NAVBAR
+   ========================================================================== */
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 100; height: var(--nav-h); display: flex; align-items: center; transition: background .35s ease, border-color .35s ease, box-shadow .35s ease; border-bottom: 1px solid transparent; }
+.nav.is-scrolled, .nav.is-open { background: rgba(10, 14, 39, .86); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-bottom-color: var(--line); box-shadow: 0 10px 40px rgba(3, 5, 20, .4); }
+.nav__inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.nav__links { display: none; }
+.nav__cta { display: none; }
+.nav__toggle { width: 44px; height: 44px; display: grid; place-items: center; background: transparent; border: 1px solid var(--line-strong); border-radius: 12px; cursor: pointer; }
+.nav__toggle span { display: block; width: 18px; height: 2px; background: var(--color-white); border-radius: 2px; position: relative; transition: background .2s; }
+.nav__toggle span::before, .nav__toggle span::after { content: ""; position: absolute; left: 0; width: 18px; height: 2px; background: var(--color-white); border-radius: 2px; transition: transform .3s ease; }
+.nav__toggle span::before { top: -6px; } .nav__toggle span::after { top: 6px; }
+.nav.is-open .nav__toggle span { background: transparent; }
+.nav.is-open .nav__toggle span::before { transform: translateY(6px) rotate(45deg); }
+.nav.is-open .nav__toggle span::after  { transform: translateY(-6px) rotate(-45deg); }
+
+/* Menú móvil desplegable */
+.nav__panel { position: absolute; top: var(--nav-h); left: 0; right: 0; background: rgba(10, 14, 39, .97); border-bottom: 1px solid var(--line); padding: 8px var(--gutter) 28px; display: grid; gap: 4px; transform-origin: top; transform: scaleY(.96); opacity: 0; visibility: hidden; transition: opacity .25s ease, transform .25s ease, visibility .25s; }
+.nav.is-open .nav__panel { opacity: 1; visibility: visible; transform: none; }
+.nav__panel a:not(.btn) { padding: 14px 4px; font-family: var(--font-head); font-weight: 600; color: var(--color-white); border-bottom: 1px solid var(--line); }
+.nav__panel .btn { margin-top: 18px; }
+
+@media (min-width: 1024px) {
+  .nav__toggle, .nav__panel { display: none; }
+  .nav__links { display: flex; gap: 2.4rem; }
+  .nav__links a { position: relative; font-size: .92rem; font-weight: 500; color: var(--ink-soft); transition: color .25s; padding-block: 6px; }
+  .nav__links a::after { content: ""; position: absolute; left: 0; bottom: 0; height: 1px; width: 0; background: var(--color-accent); transition: width .3s ease; box-shadow: 0 0 8px var(--color-accent); }
+  .nav__links a:hover { color: var(--color-white); }
+  .nav__links a:hover::after { width: 100%; }
+  .nav__cta { display: inline-flex; }
+}
+
+/* ==========================================================================
+   6. HERO
+   ========================================================================== */
+.hero { padding-top: calc(var(--nav-h) + clamp(36px, 7vw, 80px)); padding-bottom: clamp(56px, 8vw, 110px); overflow: hidden; }
+.hero__grid { display: grid; gap: 48px; align-items: center; }
+.badge { display: inline-flex; align-items: center; gap: .6rem; padding: .45rem 1rem .45rem .7rem; border: 1px solid var(--line-strong); border-radius: 999px; background: rgba(255, 255, 255, .04); font-size: .8rem; color: var(--silver); }
+.badge i { width: 8px; height: 8px; border-radius: 50%; background: var(--color-accent); animation: pulse 2.4s infinite; }
+.hero__title { font-size: clamp(2.3rem, 6.2vw, 3.9rem); font-weight: 800; margin-top: 1.4rem; text-wrap: balance; letter-spacing: -.025em; }
+.hero__sub { margin-top: 1.4rem; font-size: clamp(1rem, 1.6vw, 1.15rem); max-width: 54ch; }
+.hero__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 2rem; }
+.hero__points { display: flex; flex-wrap: wrap; gap: .6rem 1.6rem; margin-top: 2.2rem; font-size: .88rem; color: var(--silver); }
+.hero__points li { display: inline-flex; align-items: center; gap: .5rem; }
+.hero__points .ico { width: 1.1em; height: 1.1em; color: var(--color-accent); stroke-width: 2.2; }
+
+/* Visual: luna + órbitas + constelación */
+.hero__visual { position: relative; width: min(100%, 540px); aspect-ratio: 1; margin-inline: auto; }
+.hero__glow { position: absolute; inset: 12%; border-radius: 50%; background: radial-gradient(circle, rgba(232, 236, 250, .42) 0%, rgba(121, 134, 203, .3) 42%, transparent 70%); filter: blur(22px); }
+.hero__orbits, .hero__const { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero__orbits .ring { fill: none; stroke: var(--color-matte); stroke-opacity: .2; }
+.hero__orbits .ring--dash { stroke: var(--color-accent); stroke-opacity: .45; stroke-dasharray: 2 9; stroke-linecap: round; }
+.hero__orbits .spin { transform-origin: 250px 250px; animation: spin 90s linear infinite; }
+.hero__const line, .hero__const polyline { stroke: var(--silver); stroke-opacity: .38; stroke-width: 1; stroke-dasharray: 3 5; fill: none; }
+.hero__const circle { fill: var(--silver); opacity: .8; }
+.hero__moon { position: absolute; left: 50%; top: 50%; width: 58%; height: auto; aspect-ratio: 1; object-fit: contain; margin: -29% 0 0 -29%; animation: float 7s ease-in-out infinite; filter: drop-shadow(0 0 2px rgba(255, 255, 255, .6)) drop-shadow(0 0 30px rgba(232, 236, 250, .35)); }
+.chip { position: absolute; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 6px; animation: float-sm 6s ease-in-out infinite; animation-delay: var(--fd, 0s); }
+.chip__box { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; color: var(--color-accent); background: rgba(14, 19, 56, .8); border: 1px solid rgba(253, 216, 53, .38); box-shadow: 0 0 24px rgba(253, 216, 53, .14); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.chip__box .ico { width: 24px; height: 24px; }
+.chip small { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--silver); }
+
+@media (min-width: 640px) { .chip__box { width: 60px; height: 60px; } .chip__box .ico { width: 28px; height: 28px; } }
+@media (min-width: 1024px) {
+  .hero__grid { grid-template-columns: 1.08fr .92fr; gap: 32px; }
+  .hero__title { font-size: clamp(2.6rem, 3.6vw, 3.5rem); }
+}
+
+/* ==========================================================================
+   7. MANIFIESTO
+   ========================================================================== */
+.manifesto { text-align: center; overflow: hidden; }
+.manifesto .watermark { width: min(120vw, 700px); left: 50%; top: 50%; transform: translate(-50%, -50%); opacity: .045; }
+.manifesto .orbits { width: min(170vw, 1100px); left: 50%; top: 50%; transform: translate(-50%, -50%); opacity: .28; }
+.manifesto__inner { position: relative; max-width: 820px; margin-inline: auto; }
+.manifesto__text { font-family: var(--font-head); font-weight: 400; font-size: clamp(1.2rem, 2.4vw, 1.75rem); line-height: 1.5; letter-spacing: -.01em; color: var(--silver); margin-top: 1.6rem; text-wrap: pretty; }
+.manifesto__text strong { font-weight: 700; color: var(--color-white); }
+.manifesto__text em { font-style: normal; font-weight: 600; color: var(--color-accent); }
+.manifesto__sign { margin-top: 2.2rem; display: inline-flex; align-items: center; gap: .8rem; font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; color: var(--color-matte); }
+.manifesto__sign::before, .manifesto__sign::after { content: ""; width: 34px; height: 1px; border-top: 1px dashed var(--color-accent); }
+
+/* ==========================================================================
+   8. PILARES
+   ========================================================================== */
+.pillars__grid { display: grid; gap: 20px; }
+.pillar { padding: 32px 28px; display: flex; flex-direction: column; gap: 1rem; overflow: hidden; }
+.pillar__num { position: absolute; top: 22px; right: 26px; font-family: var(--font-head); font-weight: 800; font-size: 2.6rem; color: rgba(176, 190, 197, .08); line-height: 1; }
+.pillar__icon { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; color: var(--color-accent); background: linear-gradient(145deg, rgba(253, 216, 53, .12), rgba(253, 216, 53, .02)); border: 1px solid rgba(253, 216, 53, .3); }
+.pillar__icon .ico { width: 28px; height: 28px; }
+.pillar h3 { font-size: 1.2rem; font-weight: 700; margin-top: .6rem; }
+.pillar p { font-size: .96rem; }
+@media (min-width: 640px)  { .pillars__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .pillars__grid { grid-template-columns: repeat(4, 1fr); } }
+
+/* ==========================================================================
+   9. PROPUESTA DE VALOR
+   ========================================================================== */
+.value__grid { display: grid; gap: 24px; }
+.value-card { padding: clamp(28px, 4vw, 48px); overflow: hidden; display: flex; flex-direction: column; gap: 1.2rem; }
+.value-card--a { background: linear-gradient(160deg, rgba(253, 216, 53, .07), rgba(255, 255, 255, .02) 45%); }
+.value-card--b { background: linear-gradient(160deg, rgba(57, 73, 171, .3), rgba(255, 255, 255, .02) 50%); }
+.value-card__ico { position: relative; width: 84px; height: 84px; display: grid; place-items: center; color: var(--color-accent); }
+.value-card__ico::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 1px dashed rgba(253, 216, 53, .5); animation: spin 40s linear infinite; }
+.value-card__ico::after { content: ""; position: absolute; inset: 10px; border-radius: 50%; background: rgba(14, 19, 56, .8); border: 1px solid var(--line-strong); }
+.value-card__ico .ico { position: relative; z-index: 1; width: 34px; height: 34px; }
+.value-card .tag { font-family: var(--font-head); font-size: .72rem; text-transform: uppercase; letter-spacing: .2em; color: var(--color-matte); }
+.value-card h3 { font-size: clamp(1.4rem, 2.4vw, 1.8rem); font-weight: 700; }
+.value-card ul { display: grid; gap: .7rem; margin-block: .4rem 1rem; }
+.value-card li { display: flex; gap: .7rem; align-items: flex-start; color: var(--silver); font-size: .96rem; }
+.value-card li .ico { color: var(--color-accent); width: 1.15em; height: 1.15em; margin-top: .3em; stroke-width: 2.2; }
+.value-card .btn { align-self: flex-start; margin-top: auto; }
+@media (min-width: 1024px) { .value__grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ==========================================================================
+   10. PORTAFOLIO DE SERVICIOS (diagrama jerárquico)
+   ========================================================================== */
+.tree { display: grid; justify-items: center; }
+.tree__root { display: inline-flex; align-items: center; gap: .9rem; padding: 14px 30px 14px 18px; border-radius: 999px; background: linear-gradient(160deg, rgba(26, 35, 126, .75), rgba(14, 19, 56, .9)); border: 1px solid rgba(253, 216, 53, .55); box-shadow: 0 0 0 6px rgba(253, 216, 53, .05), 0 0 50px rgba(253, 216, 53, .18); position: relative; z-index: 2; }
+.tree__root .brand__mark { width: 46px; height: 46px; }
+.tree__root b { font-family: var(--font-head); font-weight: 800; letter-spacing: .14em; font-size: 1.05rem; color: var(--color-white); }
+.tree__lines { display: none; width: 100%; height: 110px; margin-top: -2px; }
+.tree__lines path { fill: none; stroke: var(--color-accent); stroke-opacity: .7; stroke-width: 1.5; stroke-dasharray: 4 6; animation: flow 1.6s linear infinite; vector-effect: non-scaling-stroke; }
+.tree__cols { display: grid; gap: 52px; width: 100%; margin-top: 40px; }
+.svc { padding: 32px 28px; display: flex; flex-direction: column; gap: 1rem; }
+/* Conector móvil */
+.svc::before { content: ""; position: absolute; left: 50%; top: -41px; height: 40px; border-left: 1.5px dashed rgba(253, 216, 53, .7); }
+.svc::after  { content: ""; position: absolute; left: 50%; top: -4px; width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 12px var(--color-accent); }
+.svc__icon { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; color: var(--silver); background: rgba(255, 255, 255, .05); border: 1px solid var(--line-strong); }
+.svc:hover .svc__icon { color: var(--color-accent); border-color: rgba(253, 216, 53, .5); }
+.svc__icon .ico { width: 28px; height: 28px; }
+.svc h3 { font-size: 1.25rem; font-weight: 700; }
+.svc > p { font-size: .94rem; }
+.svc ul { display: grid; gap: .55rem; margin-top: .4rem; padding-top: 1.1rem; border-top: 1px dashed var(--line-strong); }
+.svc li { display: flex; align-items: center; gap: .7rem; color: var(--silver); font-size: .95rem; }
+.svc li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 8px rgba(253, 216, 53, .7); flex: none; }
+@media (min-width: 1024px) {
+  .tree__lines { display: block; }
+  .tree__cols { grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 0; }
+  .svc::before { display: none; }
+  .svc::after  { top: -5px; }
+}
+
+/* ==========================================================================
+   11. METODOLOGÍA (trayectoria lunar)
+   ========================================================================== */
+.method__wrap { position: relative; }
+.method__path { display: none; position: absolute; left: 0; top: 0; width: 100%; height: 120px; pointer-events: none; }
+.method__path path { fill: none; stroke: var(--color-accent); stroke-opacity: .65; stroke-width: 1.5; stroke-dasharray: 3 7; stroke-linecap: round; vector-effect: non-scaling-stroke; animation: flow 2s linear infinite; }
+.method__steps { position: relative; display: grid; gap: 32px; padding-left: 34px; }
+.method__steps::before { content: ""; position: absolute; left: 27px; top: 28px; bottom: 28px; border-left: 1.5px dashed rgba(253, 216, 53, .55); }
+.step { position: relative; }
+.step__num { position: absolute; left: -34px; top: 0; width: 56px; height: 56px; transform: translateX(0); border-radius: 50%; display: grid; place-items: center; font-family: var(--font-head); font-weight: 800; font-size: 1.05rem; color: var(--color-accent); background: var(--bg-2); border: 1px solid rgba(253, 216, 53, .6); box-shadow: 0 0 0 6px var(--bg), 0 0 26px rgba(253, 216, 53, .22); z-index: 1; }
+.step__card { padding: 24px 24px 26px 48px; margin-left: 0; }
+.step__ico { color: var(--silver); margin-bottom: .8rem; }
+.step h3 { font-size: 1.15rem; font-weight: 700; }
+.step p { margin-top: .5rem; font-size: .94rem; }
+@media (min-width: 1024px) {
+  .method__path { display: block; }
+  .method__steps { grid-template-columns: repeat(4, 1fr); gap: 24px; padding-left: 0; }
+  .method__steps::before { display: none; }
+  .step:nth-child(1) { margin-top: 72px; } .step:nth-child(2) { margin-top: 48px; } .step:nth-child(3) { margin-top: 24px; } .step:nth-child(4) { margin-top: 0; }
+  .step__num { position: relative; left: auto; margin: 0 auto -28px; }
+  .step__card { padding: 44px 24px 28px; text-align: center; }
+  .step__ico { display: flex; justify-content: center; }
+}
+
+/* ==========================================================================
+   12. MOCKUP DE PRODUCTO
+   ========================================================================== */
+.product { overflow: hidden; }
+.product__points { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem 2rem; margin: 0 auto clamp(36px, 5vw, 64px); color: var(--silver); font-size: .92rem; }
+.product__points li { display: inline-flex; gap: .55rem; align-items: center; }
+.product__points .ico { color: var(--color-accent); width: 1.15em; height: 1.15em; stroke-width: 2.2; }
+.mock { position: relative; max-width: 1080px; margin-inline: auto; display: grid; gap: 28px; justify-items: center; }
+.mock__glow { position: absolute; inset: 8% 4%; background: radial-gradient(closest-side, rgba(57, 73, 171, .5), transparent); filter: blur(30px); z-index: 0; }
+.browser { position: relative; z-index: 1; width: 100%; overflow: hidden; background: linear-gradient(180deg, #10163F, #0B1032); border-color: var(--line-strong); }
+.browser__bar { display: flex; align-items: center; gap: 7px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, .03); }
+.browser__bar i { width: 10px; height: 10px; border-radius: 50%; background: rgba(176, 190, 197, .3); }
+.browser__bar i:first-child { background: var(--color-accent); }
+.browser__url { margin-left: 10px; flex: 1; max-width: 340px; padding: 4px 12px; border-radius: 999px; background: rgba(255, 255, 255, .05); font-size: .72rem; color: var(--color-matte); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dash { display: grid; }
+.dash__side { display: none; }
+.dash__main { padding: 18px; display: grid; gap: 16px; }
+.dash__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.dash__top h4 { font-size: 1rem; font-weight: 700; }
+.dash__top small { display: block; font-size: .72rem; color: var(--color-matte); margin-top: 2px; font-family: var(--font-body); font-weight: 400; }
+.pill { display: inline-flex; align-items: center; gap: .45rem; padding: .3rem .75rem; border-radius: 999px; font-size: .7rem; font-weight: 600; border: 1px solid rgba(253, 216, 53, .4); color: var(--color-accent); background: rgba(253, 216, 53, .08); white-space: nowrap; }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+.pill--mute { color: var(--color-matte); border-color: var(--line-strong); background: transparent; }
+.pill--mute::before { animation: none; opacity: .6; }
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.kpi { padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255, 255, 255, .03); }
+.kpi small { display: block; font-size: .66rem; color: var(--color-matte); text-transform: uppercase; letter-spacing: .08em; }
+.kpi b { display: block; margin-top: 4px; font-family: var(--font-head); font-size: 1.15rem; color: var(--color-white); }
+.kpi em { font-style: normal; font-size: .68rem; color: var(--color-accent); }
+.dash__grid { display: grid; gap: 14px; }
+.panel { border: 1px solid var(--line); border-radius: 16px; background: rgba(255, 255, 255, .025); padding: 14px; }
+.panel__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: .78rem; color: var(--silver); font-weight: 600; }
+.legend { display: flex; gap: 12px; font-weight: 400; font-size: .68rem; color: var(--color-matte); }
+.legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; background: var(--color-accent); }
+.legend i.s { background: var(--color-matte); opacity: .7; }
+.chart { width: 100%; height: auto; }
+.chart .grid line { stroke: rgba(176, 190, 197, .12); stroke-width: 1; }
+.chart .lbl { fill: var(--color-matte); font-size: 10px; font-family: var(--font-body); }
+.chart .base { fill: none; stroke: var(--color-matte); stroke-opacity: .55; stroke-width: 1.5; stroke-dasharray: 4 5; }
+.chart .line { fill: none; stroke: var(--color-accent); stroke-width: 2.5; stroke-linecap: round; filter: drop-shadow(0 0 6px rgba(253, 216, 53, .6)); }
+.js .chart .line { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.js .is-visible .chart .line { stroke-dashoffset: 0; transition: stroke-dashoffset 2.4s cubic-bezier(.4, 0, .2, 1) .5s; }
+.chart .area { fill: url(#areaGrad); }
+.flow { display: grid; gap: 8px; }
+.flow li { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 9px 10px; border-radius: 12px; background: rgba(255, 255, 255, .03); border: 1px solid var(--line); }
+.flow .ico { width: 18px; height: 18px; color: var(--silver); }
+.flow strong { display: block; font-size: .78rem; color: var(--color-white); font-weight: 600; line-height: 1.3; }
+.flow div span { display: block; font-size: .68rem; color: var(--color-matte); }
+.flow .pill { font-size: .62rem; padding: .2rem .55rem; }
+
+/* Teléfono */
+.phone { position: relative; z-index: 2; width: 250px; padding: 9px; border-radius: 38px; background: linear-gradient(160deg, #2A3170, #0B1032); border: 1px solid var(--line-strong); box-shadow: 0 30px 70px rgba(3, 5, 20, .7), 0 0 60px rgba(57, 73, 171, .35); animation: float 8s ease-in-out infinite; }
+.phone__screen { border-radius: 30px; overflow: hidden; background: linear-gradient(180deg, #131A4F, #0A0E27 70%); padding: 14px 14px 16px; min-height: 470px; position: relative; }
+.phone__notch { width: 78px; height: 20px; margin: 0 auto 14px; border-radius: 999px; background: #05071A; }
+.phone__hello { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.phone__hello span { font-size: .72rem; color: var(--color-matte); }
+.phone__hello strong { display: block; font-family: var(--font-head); font-size: .98rem; color: var(--color-white); }
+.phone__hello .brand__mark { width: 30px; height: 30px; }
+.plan { position: relative; overflow: hidden; padding: 16px; border-radius: 20px; background: linear-gradient(145deg, #283593, #1A237E 60%, #12185A); border: 1px solid rgba(253, 216, 53, .4); box-shadow: 0 0 30px rgba(253, 216, 53, .14); }
+.plan::after { content: ""; position: absolute; right: -30px; top: -30px; width: 110px; height: 110px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .18); box-shadow: 0 0 0 16px rgba(255, 255, 255, .04); }
+.plan small { font-size: .65rem; letter-spacing: .16em; text-transform: uppercase; color: var(--color-accent); font-weight: 600; }
+.plan b { display: block; margin: 6px 0 2px; font-family: var(--font-head); font-size: 1.15rem; color: var(--color-white); }
+.plan p { font-size: .72rem; color: #C5CAE9; }
+.plan .btn { width: 100%; margin-top: 12px; padding: .6rem; font-size: .78rem; }
+.phone h5 { margin: 16px 0 8px; font-family: var(--font-head); font-size: .76rem; color: var(--silver); text-transform: uppercase; letter-spacing: .12em; font-weight: 600; }
+.agent { display: flex; align-items: center; gap: 10px; padding: 10px; margin-bottom: 8px; border-radius: 14px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line); font-size: .74rem; color: var(--color-white); }
+.agent .ico { width: 18px; height: 18px; color: var(--color-accent); }
+.agent span { flex: 1; line-height: 1.3; }
+.agent small { display: block; color: var(--color-matte); font-size: .64rem; }
+.toggle { width: 30px; height: 17px; border-radius: 999px; background: var(--color-accent); position: relative; flex: none; }
+.toggle::after { content: ""; position: absolute; right: 2px; top: 2px; width: 13px; height: 13px; border-radius: 50%; background: #0A0E27; }
+.toggle.off { background: rgba(176, 190, 197, .3); } .toggle.off::after { right: auto; left: 2px; background: #fff; }
+
+@media (min-width: 640px) {
+  .dash__main { padding: 22px; }
+  .kpi b { font-size: 1.4rem; } .kpi { padding: 14px 16px; }
+}
+@media (min-width: 1024px) {
+  .mock { display: block; padding-bottom: 60px; }
+  .browser { width: calc(100% - 190px); margin-right: auto; }
+  .phone { position: absolute; right: 0; bottom: 0; }
+  .dash__main { padding-right: 78px; }
+  .dash { grid-template-columns: 64px 1fr; }
+  .dash__side { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 18px 0; border-right: 1px solid var(--line); }
+  .dash__side .brand__mark { width: 30px; height: 30px; margin-bottom: 8px; }
+  .dash__side span { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; color: var(--color-matte); }
+  .dash__side span.on { color: var(--color-accent); background: rgba(253, 216, 53, .1); border: 1px solid rgba(253, 216, 53, .35); }
+  .dash__side .ico { width: 19px; height: 19px; }
+  .dash__grid { grid-template-columns: 1.35fr 1fr; }
+}
+
+
+/* ==========================================================================
+   13. PRUEBA SOCIAL
+   ========================================================================== */
+.trust__label { text-align: center; font-size: .78rem; text-transform: uppercase; letter-spacing: .2em; color: var(--color-matte); }
+.logos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 26px 0 18px; }
+.logo-ph { display: flex; align-items: center; justify-content: center; gap: .6rem; padding: 18px 10px; border-radius: 16px; border: 1px solid var(--line); background: rgba(255, 255, 255, .02); font-family: var(--font-head); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: .9rem; color: var(--color-matte); opacity: .8; transition: color .3s, border-color .3s, opacity .3s; }
+.logo-ph svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.logo-ph:hover { color: var(--silver); border-color: var(--line-strong); opacity: 1; }
+.techs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: clamp(48px, 7vw, 80px); }
+.techs li { padding: .4rem .95rem; border-radius: 999px; border: 1px solid var(--line); font-size: .8rem; color: var(--silver); background: rgba(255, 255, 255, .03); }
+.quotes { display: grid; gap: 20px; }
+.quote { padding: 30px 28px; display: flex; flex-direction: column; gap: 1.2rem; }
+.quote__mark { width: 30px; height: 30px; fill: var(--color-accent); opacity: .9; }
+.quote blockquote { margin: 0; color: var(--silver); font-size: 1rem; line-height: 1.7; flex: 1; }
+.quote figcaption { display: flex; align-items: center; gap: 14px; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+.avatar { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-head); font-weight: 700; font-size: .9rem; color: var(--color-white); background: linear-gradient(145deg, #3949AB, #1A237E); border: 1px solid rgba(253, 216, 53, .45); flex: none; }
+.quote strong { display: block; color: var(--color-white); font-family: var(--font-head); font-size: .95rem; }
+.quote figcaption span { font-size: .82rem; color: var(--color-matte); }
+.stars-row { display: flex; gap: 3px; color: var(--color-accent); }
+.stars-row svg { width: 15px; height: 15px; fill: currentColor; }
+@media (min-width: 640px)  { .logos { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1024px) { .logos { grid-template-columns: repeat(6, 1fr); } .quotes { grid-template-columns: repeat(3, 1fr); } }
+
+/* ==========================================================================
+   14. CTA FINAL
+   ========================================================================== */
+.cta { padding-block: clamp(56px, 8vw, 100px); }
+.cta__band { position: relative; overflow: hidden; text-align: center; padding: clamp(48px, 8vw, 96px) clamp(20px, 5vw, 64px); border-radius: 32px; border: 1px solid var(--line-strong); background: linear-gradient(160deg, rgba(26, 35, 126, .75), rgba(10, 14, 39, .9) 65%); box-shadow: 0 30px 90px rgba(3, 5, 20, .6); }
+.cta__band .watermark { width: min(100%, 560px); right: 50%; top: 50%; transform: translate(50%, -50%); opacity: .08; animation: float-c 9s ease-in-out infinite; }
+@keyframes float-c { 0%, 100% { transform: translate(50%, -50%); } 50% { transform: translate(50%, calc(-50% - 14px)); } }
+.cta__band .orbits { width: 130%; max-width: 1000px; left: 50%; top: 50%; transform: translate(-50%, -50%); opacity: .25; }
+.cta__inner { position: relative; max-width: 720px; margin-inline: auto; }
+.cta h2 { font-size: clamp(1.9rem, 4.6vw, 3.2rem); font-weight: 800; text-wrap: balance; letter-spacing: -.02em; }
+.cta p.lead { margin: 1.2rem auto 0; font-size: 1.08rem; max-width: 54ch; color: #CFD8DC; }
+.cta__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 2rem; }
+.cta__form { display: flex; flex-direction: column; gap: 10px; max-width: 480px; margin: 2.2rem auto 0; }
+.cta__form label { font-size: .8rem; color: var(--color-matte); text-align: left; }
+.field { display: flex; flex-direction: column; gap: 10px; }
+.field input { width: 100%; padding: .95rem 1.2rem; border-radius: 999px; border: 1px solid var(--line-strong); background: rgba(10, 14, 39, .6); color: var(--color-white); outline: none; transition: border-color .25s, box-shadow .25s; }
+.field input::placeholder { color: #78909C; }
+.field input:focus { border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(253, 216, 53, .15), 0 0 24px rgba(253, 216, 53, .12); }
+.cta__msg { min-height: 1.4em; font-size: .85rem; color: var(--color-accent); text-align: left; }
+@media (min-width: 640px) { .field { flex-direction: row; } .field .btn { flex: none; } }
+
+/* ==========================================================================
+   15. FOOTER
+   ========================================================================== */
+.footer { border-top: 1px solid var(--line); background: linear-gradient(180deg, transparent, rgba(3, 5, 20, .55)); padding-top: clamp(48px, 7vw, 80px); }
+.footer__grid { display: grid; gap: 40px; }
+.footer__brand p { margin-top: 1.1rem; max-width: 34ch; font-size: .92rem; }
+.footer__tag { display: block; margin-top: 1.1rem; font-family: var(--font-head); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--color-matte); }
+.footer__cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 24px; }
+.footer h4 { font-size: .8rem; text-transform: uppercase; letter-spacing: .16em; color: var(--color-white); margin-bottom: 1.1rem; }
+.footer li + li { margin-top: .65rem; }
+.footer li a { font-size: .92rem; transition: color .2s; }
+.footer li a:hover { color: var(--color-accent); }
+.footer__bottom { display: flex; flex-direction: column; gap: 18px; align-items: flex-start; margin-top: clamp(40px, 6vw, 64px); padding-block: 24px; border-top: 1px solid var(--line); font-size: .84rem; }
+.social { display: flex; gap: 10px; }
+.social a { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line-strong); font-family: var(--font-head); font-weight: 700; font-size: .78rem; color: var(--silver); transition: border-color .25s, color .25s, box-shadow .25s, transform .25s; }
+.social a:hover { border-color: var(--color-accent); color: var(--color-accent); box-shadow: 0 0 20px rgba(253, 216, 53, .22); transform: translateY(-2px); }
+@media (min-width: 640px) { .footer__cols { grid-template-columns: repeat(4, 1fr); } .footer__bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
+@media (min-width: 1024px) { .footer__grid { grid-template-columns: 1.1fr 2fr; gap: 64px; } }
+
+/* ==========================================================================
+   15a. NAVEGACIÓN POR SECCIONES (transiciones "de pantalla en pantalla")
+   - Escritorio (JS agrega html.paged): cada gesto de scroll salta a la
+     siguiente pantalla con una transición suave; las secciones largas se
+     recorren en pasos de una pantalla.
+   - Móvil / táctil: scroll nativo con imán suave hacia el inicio de cada sección.
+   ========================================================================== */
+html.paged { scroll-behavior: auto; }
+html.paged main > section { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
+html.paged .divider { display: none; }
+.pager { position: fixed; right: 22px; top: 50%; transform: translateY(-50%); z-index: 90; display: none; flex-direction: column; gap: 14px; }
+html.paged .pager { display: flex; }
+.pager button { position: relative; width: 10px; height: 10px; padding: 0; border-radius: 999px; border: 1px solid var(--color-matte); background: transparent; cursor: pointer; transition: height .35s ease, background .3s, border-color .3s, box-shadow .3s; }
+.pager button::after { content: attr(data-label); position: absolute; right: 24px; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: .72rem; padding: 4px 11px; border-radius: 999px; background: rgba(10, 14, 39, .92); border: 1px solid var(--line-strong); color: var(--ink); opacity: 0; pointer-events: none; transition: opacity .2s; }
+.pager button:hover::after, .pager button:focus-visible::after { opacity: 1; }
+.pager button:hover { border-color: var(--color-accent); }
+.pager button.is-active { height: 24px; background: var(--color-accent); border-color: var(--color-accent); box-shadow: 0 0 14px var(--glow-gold); }
+@media (max-width: 1023px), (hover: none) {
+  html { scroll-snap-type: y proximity; }
+  main > section, footer { scroll-snap-align: start; }
+}
+
+/* ==========================================================================
+   15b. MODAL DE AGENDAMIENTO (Google Calendar)
+   ========================================================================== */
+.booking { padding: 0; border: 1px solid var(--line-strong); border-radius: 24px; background: #0E1338; color: var(--ink); width: min(920px, calc(100vw - 24px)); max-width: none; max-height: none; box-shadow: 0 40px 120px rgba(0, 0, 0, .7), 0 0 60px rgba(57, 73, 171, .25); overflow: hidden; }
+.booking[open] { display: flex; flex-direction: column; height: min(780px, calc(100dvh - 24px)); animation: pop .35s cubic-bezier(.2, .7, .2, 1); }
+.booking::backdrop { background: rgba(5, 7, 26, .8); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+@keyframes pop { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: none; } }
+.booking__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 18px 20px 16px 24px; border-bottom: 1px solid var(--line); }
+.booking__head h2 { font-size: 1.15rem; font-weight: 700; }
+.booking__head p { margin-top: 4px; font-size: .85rem; }
+.booking__close { flex: none; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; border: 1px solid var(--line-strong); background: transparent; color: var(--color-white); cursor: pointer; transition: border-color .25s, color .25s, box-shadow .25s; }
+.booking__close:hover { border-color: var(--color-accent); color: var(--color-accent); box-shadow: 0 0 20px rgba(253, 216, 53, .2); }
+.booking__close .ico { width: 20px; height: 20px; }
+.booking__body { position: relative; flex: 1; min-height: 0; background: #fff; }
+.booking__body::before { content: "Cargando agenda…"; position: absolute; inset: 0; display: grid; place-items: center; color: #5C6BC0; font-size: .9rem; }
+.booking__body iframe { position: relative; display: block; width: 100%; height: 100%; border: 0; background: transparent; }
+.booking__foot { padding: 12px 24px; border-top: 1px solid var(--line); font-size: .8rem; text-align: center; }
+.booking__foot a { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ==========================================================================
+   16. ACCESIBILIDAD: menos movimiento
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  .js .reveal { opacity: 1; transform: none; }
+  .js .chart .line { stroke-dashoffset: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ==========================================================================
+     SPRITE SVG: logo (luna + trayectoria + estrella) e íconos lineales
+     ========================================================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDD835" stop-opacity=".28"/><stop offset="1" stop-color="#FDD835" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Órbitas concéntricas decorativas -->
+  <symbol id="orbits" viewBox="0 0 800 800">
+    <circle cx="400" cy="400" r="120" stroke-width="1"/>
+    <circle cx="400" cy="400" r="200" stroke-width="1"/>
+    <circle cx="400" cy="400" r="290" stroke-width="1" stroke-dasharray="2 8"/>
+    <circle cx="400" cy="400" r="385" stroke-width="1"/>
+  </symbol>
+
+  <!-- Íconos (24x24, trazo) -->
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polygon points="15.5 8.5 13.5 13.5 8.5 15.5 10.5 10.5"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="m3 13 9 5 9-5"/><path d="m3 17.5 9 5 9-5" opacity=".5"/></symbol>
+  <symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="11" rx="3.5"/><path d="M12 8V4.5"/><circle cx="12" cy="3.6" r="1"/><circle cx="9" cy="13.5" r="1"/><circle cx="15" cy="13.5" r="1"/><path d="M2 13v2.5M22 13v2.5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.5 3.2 8 7.5 9.5 4.3-1.5 7.5-5 7.5-9.5V6L12 3z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M12 2.5c3 2 4.5 5.2 4.5 8.5l1.5 3.5v2.5h-3l-1.5 2h-3l-1.5-2H6v-2.5L7.5 11c0-3.3 1.5-6.5 4.5-8.5z"/><circle cx="12" cy="10" r="1.6"/><path d="M12 19.5V22"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2.3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-7"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 8-5 4 5 4M16 8l5 4-5 4M14 5l-4 14"/></symbol>
+  <symbol id="i-ai" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="6" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="5" cy="18" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M10 10.3 6.3 7.3M14 10.3l3.7-3M10 13.7l-3.7 3M14 13.7l3.7 3"/></symbol>
+  <symbol id="i-app" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="12" height="15" rx="2.5"/><rect x="15" y="8.5" width="6.5" height="11" rx="1.8"/><path d="M2.5 9h12"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="6.5" rx="2"/><rect x="3" y="13.5" width="18" height="6.5" rx="2"/><path d="M7 7.3h.01M7 16.8h.01"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 9.5a4 4 0 0 1-.5 8.5H7z"/></symbol>
+  <symbol id="i-workflow" viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="15" y="15" width="6" height="6" rx="1.5"/><path d="M6 9v3a3 3 0 0 0 3 3h6"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
+  <symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 3 3 8v8l9 5 9-5V8l-9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></symbol>
+  <symbol id="i-audit" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/><path d="m8.5 11 1.8 1.8 3.2-3.5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></symbol>
+  <symbol id="i-loop" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-14 5.3M4 12a8 8 0 0 1 14-5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></symbol>
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12c0-4 3-6.5 8-6.5 0 4-2.5 6.5-8 6.5z"/><path d="M12 15c0-3-2.2-5-6.5-5 0 3.2 2 5 6.5 5z"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
+</svg>
+
+<!-- Indicador lateral de secciones (lo genera el script en escritorio) -->
+<nav class="pager" id="pager" aria-label="Secciones"></nav>
+
+<!-- Estrellas de fondo (las genera el script) -->
+<div class="stars" id="stars" aria-hidden="true"></div>
+
+<!-- ==========================================================================
+     1. NAVBAR
+     ========================================================================== -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="#inicio" class="brand" aria-label="LunaLabs — inicio">
+      <img class="brand__mark" src="Lunalabs-logo.png" alt="" width="40" height="40">
+      <span class="brand__text"><b>Luna</b><span>Labs</span></span>
+    </a>
+
+    <nav class="nav__links" aria-label="Principal">
+      <a href="#servicios">Servicios</a>
+      <a href="#metodologia">Metodología</a>
+      <a href="#casos">Casos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" target="_blank" rel="noopener" data-booking class="btn btn--gold btn--sm nav__cta">Agenda una consultoría</a>
+
+    <button class="nav__toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navPanel"><span></span></button>
+  </div>
+
+  <!-- Panel móvil -->
+  <div class="nav__panel" id="navPanel">
+    <a href="#servicios">Servicios</a>
+    <a href="#metodologia">Metodología</a>
+    <a href="#casos">Casos</a>
+    <a href="#contacto">Contacto</a>
+    <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" target="_blank" rel="noopener" data-booking class="btn btn--gold">Agenda una consultoría</a>
+  </div>
+</header>
+
+<main id="inicio">
+
+<!-- ==========================================================================
+     2. HERO
+     ========================================================================== -->
+<section class="hero" data-label="Inicio">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <span class="badge reveal"><i></i>Guía estratégica para tu transformación digital</span>
+      <h1 class="hero__title reveal" style="--d:.08s">Sistemas que <span class="grad-text">evolucionan</span> con tu negocio</h1>
+      <p class="hero__sub reveal" style="--d:.16s">Transformamos la complejidad técnica en claridad operativa. Diseñamos software escalable y automatizamos con IA, para que tu empresa crezca con una base sólida y sin perder el rumbo.</p>
+      <div class="hero__cta reveal" style="--d:.24s">
+        <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" target="_blank" rel="noopener" data-booking class="btn btn--gold">Agenda una consultoría <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a href="#servicios" class="btn btn--ghost">Ver servicios</a>
+      </div>
+      <ul class="hero__points reveal" style="--d:.32s">
+        <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Entregas iterativas</li>
+        <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Comunicación transparente</li>
+        <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Pensado para escalar</li>
+      </ul>
+    </div>
+
+    <!-- Luna 3D flotante, órbitas y constelación de íconos -->
+    <div class="hero__visual reveal" style="--d:.2s" aria-hidden="true">
+      <div class="hero__glow"></div>
+
+      <svg class="hero__orbits" viewBox="0 0 500 500">
+        <circle class="ring" cx="250" cy="250" r="118"/>
+        <circle class="ring" cx="250" cy="250" r="176"/>
+        <circle class="ring" cx="250" cy="250" r="236"/>
+        <g class="spin">
+          <circle class="ring ring--dash" cx="250" cy="250" r="206"/>
+          <circle cx="456" cy="250" r="4.5" fill="#FDD835"/>
+          <circle cx="456" cy="250" r="10" fill="#FDD835" opacity=".15"/>
+        </g>
+      </svg>
+
+      <svg class="hero__const" viewBox="0 0 500 500">
+        <polyline points="60,150 170,88 330,60 405,190 445,330"/>
+        <polyline points="100,410 235,448 445,330"/>
+        <line x1="60" y1="150" x2="250" y2="250" opacity=".5"/>
+        <circle cx="170" cy="88" r="2.5"/><circle cx="405" cy="190" r="2.5"/><circle cx="235" cy="448" r="2.5"/>
+        <circle cx="100" cy="410" r="2"/><circle cx="470" cy="120" r="1.8"/><circle cx="30" cy="290" r="1.8"/>
+      </svg>
+
+      <img class="hero__moon" src="Lunalabs-logo.png" alt="" width="1040" height="960">
+
+      <div class="chip" style="left:12%;top:30%;--fd:0s"><div class="chip__box"><svg class="ico"><use href="#i-code"/></svg></div><small>Código</small></div>
+      <div class="chip" style="left:66%;top:12%;--fd:-2s"><div class="chip__box"><svg class="ico"><use href="#i-ai"/></svg></div><small>IA</small></div>
+      <div class="chip" style="left:89%;top:66%;--fd:-4s"><div class="chip__box"><svg class="ico"><use href="#i-gear"/></svg></div><small>Procesos</small></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider reveal" aria-hidden="true"><svg class="ico"><use href="#i-moon"/></svg></div>
+
+<!-- ==========================================================================
+     3. MANIFIESTO
+     ========================================================================== -->
+<section class="section manifesto" id="manifiesto" data-label="Manifiesto">
+  <svg class="orbits" viewBox="0 0 800 800" aria-hidden="true"><use href="#orbits"/></svg>
+  <img class="watermark" src="Lunalabs-logo.png" alt="" aria-hidden="true">
+  <div class="container manifesto__inner">
+    <span class="eyebrow reveal">Nuestro manifiesto</span>
+    <p class="manifesto__text reveal" style="--d:.1s">
+      La tecnología debe ser una guía, no un laberinto. <strong>Transformamos la complejidad técnica en claridad operativa</strong> para que tu negocio crezca con rumbo. Como la luna, <em>iluminamos el camino</em>, y no tienes que recorrerlo solo.
+    </p>
+    <span class="manifesto__sign reveal" style="--d:.2s">Logistics through guidance</span>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     4. PILARES DE MARCA
+     ========================================================================== -->
+<section class="section pillars" id="pilares" data-label="Pilares">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <span class="eyebrow reveal">Pilares de marca</span>
+      <h2 class="section-title reveal" style="--d:.08s">Cuatro ideas que guían cada proyecto</h2>
+      <p class="section-lead reveal" style="--d:.16s">No son un eslogan: son la forma en que decidimos, construimos y nos comunicamos contigo.</p>
+    </div>
+
+    <div class="pillars__grid">
+      <article class="card card--hover pillar reveal">
+        <span class="pillar__num">01</span>
+        <div class="pillar__icon"><svg class="ico" aria-hidden="true"><use href="#i-compass"/></svg></div>
+        <h3>Guía Estratégica</h3>
+        <p>Antes de escribir código, entendemos tu negocio. Te acompañamos con criterio técnico para decidir qué construir, qué automatizar y qué dejar para después.</p>
+      </article>
+      <article class="card card--hover pillar reveal" style="--d:.08s">
+        <span class="pillar__num">02</span>
+        <div class="pillar__icon"><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg></div>
+        <h3>Escalabilidad e Iteración</h3>
+        <p>Construimos en ciclos cortos y medibles. Cada entrega deja una base más sólida para que tu producto crezca sin tener que rehacerse desde cero.</p>
+      </article>
+      <article class="card card--hover pillar reveal" style="--d:.16s">
+        <span class="pillar__num">03</span>
+        <div class="pillar__icon"><svg class="ico" aria-hidden="true"><use href="#i-bot"/></svg></div>
+        <h3>Automatización Inteligente</h3>
+        <p>Usamos IA donde realmente suma: agentes, flujos y lectura de documentos que liberan horas de tu equipo para el trabajo que sí importa.</p>
+      </article>
+      <article class="card card--hover pillar reveal" style="--d:.24s">
+        <span class="pillar__num">04</span>
+        <div class="pillar__icon"><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg></div>
+        <h3>Solidez y Transparencia</h3>
+        <p>Código limpio, documentación clara y comunicación abierta. Sabrás siempre en qué punto estamos, qué sigue y cuánto cuesta.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     5. PROPUESTA DE VALOR
+     ========================================================================== -->
+<section class="section value" id="valor" data-label="Propuesta de valor">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal">Propuesta de valor</span>
+      <h2 class="section-title reveal" style="--d:.08s">Un socio tecnológico para cada etapa de tu negocio</h2>
+    </div>
+
+    <div class="value__grid">
+      <article class="card value-card value-card--a reveal">
+        <div class="value-card__ico"><svg class="ico" aria-hidden="true"><use href="#i-rocket"/></svg></div>
+        <span class="tag">Etapa de crecimiento</span>
+        <h3>Para Startups y Empresas Emergentes</h3>
+        <p>Llega al mercado más rápido sin hipotecar tu futuro técnico. Construimos tu MVP sobre una base que escala: arquitectura clara, ciclos cortos de entrega y automatización desde el primer día, para que tu equipo se concentre en crecer.</p>
+        <ul>
+          <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>MVP funcional en semanas, no en meses</li>
+          <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Arquitectura lista para soportar tu crecimiento</li>
+          <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Decisiones técnicas explicadas en lenguaje de negocio</li>
+        </ul>
+        <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" target="_blank" rel="noopener" data-booking class="btn btn--ghost">Cuéntanos tu idea <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </article>
+
+      <article class="card value-card value-card--b reveal" style="--d:.12s">
+        <div class="value-card__ico"><svg class="ico" aria-hidden="true"><use href="#i-gear"/></svg></div>
+        <span class="tag">Etapa de consolidación</span>
+        <h3>Para Empresas Establecidas</h3>
+        <p>Moderniza sin detener tu operación. Auditamos, ordenamos e integramos: conectamos tus sistemas actuales con automatización e IA para reducir tareas manuales, ganar visibilidad y evolucionar con menos riesgo.</p>
+        <ul>
+          <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Modernización gradual, sin apagar lo que ya funciona</li>
+          <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Procesos manuales convertidos en flujos automáticos</li>
+          <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Métricas claras del impacto en tiempo y costos</li>
+        </ul>
+        <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" target="_blank" rel="noopener" data-booking class="btn btn--ghost">Solicita una auditoría <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     6. PORTAFOLIO DE SERVICIOS (diagrama jerárquico)
+     ========================================================================== -->
+<section class="section services" id="servicios" data-label="Servicios">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <span class="eyebrow reveal">Portafolio de servicios</span>
+      <h2 class="section-title reveal" style="--d:.08s">Todo lo que necesitas, desde un mismo punto de partida</h2>
+      <p class="section-lead reveal" style="--d:.16s">Tres frentes conectados que se refuerzan entre sí: construimos, automatizamos y te asesoramos.</p>
+    </div>
+
+    <div class="tree">
+      <!-- Nodo central -->
+      <div class="tree__root reveal">
+        <img class="brand__mark" src="Lunalabs-logo.png" alt="" width="40" height="40">
+        <b>LUNALABS</b>
+      </div>
+
+      <!-- Líneas curvas al nodo central (escritorio) -->
+      <svg class="tree__lines" viewBox="0 0 1000 110" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M500 0 C500 60, 160 50, 160 108"/>
+        <path d="M500 0 V108"/>
+        <path d="M500 0 C500 60, 840 50, 840 108"/>
+      </svg>
+
+      <div class="tree__cols">
+        <article class="card card--hover svc reveal">
+          <div class="svc__icon"><svg class="ico" aria-hidden="true"><use href="#i-app"/></svg></div>
+          <h3>Software Studio &amp; App Dev</h3>
+          <p>Producto digital diseñado y construido para crecer contigo.</p>
+          <ul>
+            <li>Apps Web y Móviles</li>
+            <li>APIs &amp; Backend Escalable</li>
+            <li>Plataformas Cloud</li>
+          </ul>
+        </article>
+
+        <article class="card card--hover svc reveal" style="--d:.1s">
+          <div class="svc__icon"><svg class="ico" aria-hidden="true"><use href="#i-workflow"/></svg></div>
+          <h3>Automation &amp; AI Workflows</h3>
+          <p>IA aplicada a tareas reales para ahorrar horas y reducir errores.</p>
+          <ul>
+            <li>Agentes de IA e Integración</li>
+            <li>Automatización de Procesos</li>
+            <li>Parsing de Documentos</li>
+          </ul>
+        </article>
+
+        <article class="card card--hover svc reveal" style="--d:.2s">
+          <div class="svc__icon"><svg class="ico" aria-hidden="true"><use href="#i-compass"/></svg></div>
+          <h3>Tech &amp; AI Consulting</h3>
+          <p>Criterio técnico independiente para decidir bien y a tiempo.</p>
+          <ul>
+            <li>Arquitectura de Software</li>
+            <li>Auditoría Técnica</li>
+            <li>Estrategia de Escalabilidad</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider reveal" aria-hidden="true"><svg class="ico"><use href="#i-moon"/></svg></div>
+
+<!-- ==========================================================================
+     7. METODOLOGÍA
+     ========================================================================== -->
+<section class="section method" id="metodologia" data-label="Metodología">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <span class="eyebrow reveal">Cómo trabajamos</span>
+      <h2 class="section-title reveal" style="--d:.08s">Un camino iterativo, siempre hacia arriba</h2>
+      <p class="section-lead reveal" style="--d:.16s">Cada fase deja algo tangible y te acerca a la siguiente. Sin sorpresas, sin cajas negras.</p>
+    </div>
+
+    <div class="method__wrap">
+      <!-- Trayectoria lunar (escritorio): pasa por el centro de cada número -->
+      <svg class="method__path" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M125 100 C250 100, 250 76, 375 76 C500 76, 500 52, 625 52 C750 52, 750 28, 875 28"/>
+      </svg>
+
+      <ol class="method__steps" style="list-style:none;margin:0">
+        <li class="step reveal">
+          <span class="step__num">01</span>
+          <div class="card step__card">
+            <div class="step__ico"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg></div>
+            <h3>Descubrimiento</h3>
+            <p>Escuchamos, mapeamos tus procesos y definimos qué problema vale la pena resolver primero.</p>
+          </div>
+        </li>
+        <li class="step reveal" style="--d:.1s">
+          <span class="step__num">02</span>
+          <div class="card step__card">
+            <div class="step__ico"><svg class="ico" aria-hidden="true"><use href="#i-cube"/></svg></div>
+            <h3>Arquitectura</h3>
+            <p>Diseñamos una base técnica clara y escalable, con decisiones explicadas en lenguaje de negocio.</p>
+          </div>
+        </li>
+        <li class="step reveal" style="--d:.2s">
+          <span class="step__num">03</span>
+          <div class="card step__card">
+            <div class="step__ico"><svg class="ico" aria-hidden="true"><use href="#i-loop"/></svg></div>
+            <h3>Desarrollo iterativo</h3>
+            <p>Entregamos en ciclos cortos con demos frecuentes. Ves avances reales y ajustamos el rumbo contigo.</p>
+          </div>
+        </li>
+        <li class="step reveal" style="--d:.3s">
+          <span class="step__num">04</span>
+          <div class="card step__card">
+            <div class="step__ico"><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg></div>
+            <h3>Escalamiento</h3>
+            <p>Medimos, optimizamos y automatizamos para que el sistema crezca al ritmo de tu negocio.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     8. MOCKUP DE PRODUCTO
+     ========================================================================== -->
+<section class="section product" id="producto" data-label="Producto">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <span class="eyebrow reveal">Así se ve el control</span>
+      <h2 class="section-title reveal" style="--d:.08s">Tu operación, visible y bajo control</h2>
+      <p class="section-lead reveal" style="--d:.16s">Cada automatización viene con un panel claro: qué se ejecutó, cuánto tiempo ahorró y dónde necesita tu atención.</p>
+    </div>
+
+    <ul class="product__points reveal">
+      <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Métricas en tiempo real</li>
+      <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Flujos y agentes de IA en un solo lugar</li>
+      <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Disponible en web y móvil</li>
+    </ul>
+
+    <!-- Dashboard de ejemplo (contenido ilustrativo) -->
+    <div class="mock reveal" role="img" aria-label="Ilustración de un panel de automatización de LunaLabs en escritorio y móvil">
+      <div class="mock__glow"></div>
+
+      <div class="card browser">
+        <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">app.lunalabs.io / automatizaciones</span></div>
+        <div class="dash">
+          <aside class="dash__side" aria-hidden="true">
+            <img class="brand__mark" src="Lunalabs-logo.png" alt="" width="40" height="40">
+            <span class="on"><svg class="ico"><use href="#i-home"/></svg></span>
+            <span><svg class="ico"><use href="#i-workflow"/></svg></span>
+            <span><svg class="ico"><use href="#i-bot"/></svg></span>
+            <span><svg class="ico"><use href="#i-doc"/></svg></span>
+            <span><svg class="ico"><use href="#i-gear"/></svg></span>
+          </aside>
+
+          <div class="dash__main">
+            <div class="dash__top">
+              <h4>Panel de automatización<small>Últimos 7 días</small></h4>
+              <span class="pill">En vivo</span>
+            </div>
+
+            <div class="kpis">
+              <div class="kpi"><small>Procesos</small><b>1.248</b><em>▲ 18%</em></div>
+              <div class="kpi"><small>Horas ahorradas</small><b>386 h</b><em>▲ 24%</em></div>
+              <div class="kpi"><small>Precisión</small><b>99,2%</b><em>▲ 1,4 pt</em></div>
+            </div>
+
+            <div class="dash__grid">
+              <div class="panel">
+                <div class="panel__head">Tareas automatizadas
+                  <span class="legend"><span><i></i>Con LunaLabs</span><span><i class="s"></i>Antes</span></span>
+                </div>
+                <svg class="chart" viewBox="0 0 400 170" aria-hidden="true">
+                  <g class="grid"><line x1="0" y1="30" x2="400" y2="30"/><line x1="0" y1="70" x2="400" y2="70"/><line x1="0" y1="110" x2="400" y2="110"/><line x1="0" y1="150" x2="400" y2="150"/></g>
+                  <path class="area" d="M0 120 C25 118 30 102 50 100 S85 112 100 110 S130 72 150 70 S185 82 200 80 S235 48 250 45 S285 58 300 55 S335 28 350 25 S385 30 400 30 L400 150 L0 150 Z"/>
+                  <path class="base" d="M0 132 C100 130 200 126 300 120 S380 114 400 112"/>
+                  <path class="line" pathLength="1" d="M0 120 C25 118 30 102 50 100 S85 112 100 110 S130 72 150 70 S185 82 200 80 S235 48 250 45 S285 58 300 55 S335 28 350 25 S385 30 400 30"/>
+                  <g class="lbl"><text x="0" y="166">L</text><text x="62" y="166">M</text><text x="124" y="166">X</text><text x="186" y="166">J</text><text x="248" y="166">V</text><text x="310" y="166">S</text><text x="385" y="166">D</text></g>
+                </svg>
+              </div>
+
+              <div class="panel">
+                <div class="panel__head">Flujos activos</div>
+                <ul class="flow">
+                  <li><svg class="ico"><use href="#i-doc"/></svg><div><strong>Lectura de facturas</strong><span>Parser IA → ERP</span></div><span class="pill">Activo</span></li>
+                  <li><svg class="ico"><use href="#i-bot"/></svg><div><strong>Agente de soporte</strong><span>Respuestas y escalamiento</span></div><span class="pill">Activo</span></li>
+                  <li><svg class="ico"><use href="#i-workflow"/></svg><div><strong>Alta de clientes</strong><span>CRM → facturación</span></div><span class="pill pill--mute">Pausado</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Teléfono con "Plan Pro" -->
+      <div class="phone" aria-hidden="true">
+        <div class="phone__screen">
+          <div class="phone__notch"></div>
+          <div class="phone__hello">
+            <div><span>Buenos días</span><strong>Tus automatizaciones</strong></div>
+            <img class="brand__mark" src="Lunalabs-logo.png" alt="" width="40" height="40">
+          </div>
+          <div class="plan">
+            <small>Plan Pro</small>
+            <b>Agentes sin límite</b>
+            <p>Más flujos, más integraciones y soporte prioritario.</p>
+            <span class="btn btn--gold">Mejorar plan</span>
+          </div>
+          <h5>Agentes</h5>
+          <div class="agent"><svg class="ico"><use href="#i-doc"/></svg><span>Facturas<small>412 procesadas hoy</small></span><i class="toggle"></i></div>
+          <div class="agent"><svg class="ico"><use href="#i-bot"/></svg><span>Soporte 24/7<small>38 conversaciones</small></span><i class="toggle"></i></div>
+          <div class="agent"><svg class="ico"><use href="#i-workflow"/></svg><span>Inventario<small>En pausa</small></span><i class="toggle off"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     9. PRUEBA SOCIAL
+     NOTA: los nombres de empresas y los testimonios son PLACEHOLDERS.
+     Reemplázalos por clientes reales y citas autorizadas antes de publicar.
+     ========================================================================== -->
+<section class="section trust" id="casos" data-label="Casos">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <span class="eyebrow reveal">Confianza</span>
+      <h2 class="section-title reveal" style="--d:.08s">Equipos que ya avanzan con nosotros</h2>
+    </div>
+
+    <p class="trust__label reveal">Empresas que confían en LunaLabs</p>
+    <div class="logos reveal" aria-label="Logos de clientes (ejemplo)">
+      <div class="logo-ph"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Orbita</div>
+      <div class="logo-ph"><svg viewBox="0 0 24 24"><path d="M12 3 21 20H3z"/></svg>Kepler</div>
+      <div class="logo-ph"><svg viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 9.5a4 4 0 0 1-.5 8.5H7z"/></svg>Nimbus</div>
+      <div class="logo-ph"><svg viewBox="0 0 24 24"><path d="m4 5 8 14 8-14"/></svg>Vertex</div>
+      <div class="logo-ph"><svg viewBox="0 0 24 24"><path d="M12 3 20 8v8l-8 5-8-5V8z"/></svg>Helix</div>
+      <div class="logo-ph"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/></svg>Atlas</div>
+    </div>
+
+    <ul class="techs reveal" aria-label="Tecnologías con las que trabajamos">
+      <li>React</li><li>Node.js</li><li>Python</li><li>TypeScript</li><li>PostgreSQL</li><li>AWS</li><li>Google Cloud</li><li>OpenAI</li><li>Claude</li>
+    </ul>
+
+    <div class="quotes">
+      <figure class="card card--hover quote reveal" style="margin:0">
+        <div class="stars-row" aria-label="5 de 5 estrellas">
+          <svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg>
+        </div>
+        <blockquote>“Pasamos de una hoja de cálculo a una plataforma que soporta diez veces más pedidos. Lo mejor: siempre entendimos qué se estaba construyendo y por qué.”</blockquote>
+        <figcaption><span class="avatar">CR</span><div><strong>Camila Restrepo</strong><span>COO · Orbita Logística</span></div></figcaption>
+      </figure>
+
+      <figure class="card card--hover quote reveal" style="--d:.1s;margin:0">
+        <div class="stars-row" aria-label="5 de 5 estrellas">
+          <svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg>
+        </div>
+        <blockquote>“Automatizaron la lectura de nuestras facturas con IA y recuperamos más de 30 horas semanales. Se sienten parte del equipo, no un proveedor.”</blockquote>
+        <figcaption><span class="avatar">AM</span><div><strong>Andrés Molina</strong><span>Director de Operaciones · Kepler Retail</span></div></figcaption>
+      </figure>
+
+      <figure class="card card--hover quote reveal" style="--d:.2s;margin:0">
+        <div class="stars-row" aria-label="5 de 5 estrellas">
+          <svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .9-5.2 4.9 1.4 7.1L12 18l-6.2 3.5 1.4-7.1L2 9.5l7-.9z"/></svg>
+        </div>
+        <blockquote>“La auditoría técnica nos dio un mapa claro: qué arreglar primero, qué podía esperar y cuánto costaba. Decisiones sin humo.”</blockquote>
+        <figcaption><span class="avatar">VC</span><div><strong>Valentina Cruz</strong><span>CTO · Nimbus Health</span></div></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     10. CTA FINAL
+     ========================================================================== -->
+<section class="cta" id="contacto" data-label="Contacto">
+  <div class="container">
+    <div class="cta__band reveal">
+      <svg class="orbits" viewBox="0 0 800 800" aria-hidden="true"><use href="#orbits"/></svg>
+      <img class="watermark" src="Lunalabs-logo.png" alt="" aria-hidden="true">
+
+      <div class="cta__inner">
+        <span class="eyebrow">Hablemos</span>
+        <h2 style="margin-top:1rem">Convierte tu visión en un sistema que <span class="grad-text">crece contigo</span></h2>
+        <p class="lead">Cuéntanos dónde estás y hacia dónde quieres llegar. En una primera conversación te devolvemos claridad: qué hacer primero y cómo.</p>
+        <div class="cta__actions">
+          <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" target="_blank" rel="noopener" data-booking class="btn btn--gold">Agenda una consultoría <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a href="mailto:info.lunalabs@gmail.com?subject=Quiero%20conversar%20sobre%20mi%20proyecto" class="btn btn--ghost"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg>info.lunalabs@gmail.com</a>
+        </div>
+
+        <!-- Newsletter opcional (conecta el submit a tu servicio de email) -->
+        <form class="cta__form" id="newsletter" novalidate>
+          <label for="nl-email">¿Prefieres empezar despacio? Recibe guías de escalabilidad y automatización.</label>
+          <div class="field">
+            <input type="email" id="nl-email" name="email" placeholder="tu@empresa.com" autocomplete="email" required>
+            <button type="submit" class="btn btn--ghost">Suscribirme</button>
+          </div>
+          <p class="cta__msg" id="nl-msg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ==========================================================================
+     11. FOOTER
+     (Las redes sociales son placeholders: actualiza los enlaces con los reales.)
+     ========================================================================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a href="#inicio" class="brand" aria-label="LunaLabs — inicio">
+          <img class="brand__mark" src="Lunalabs-logo.png" alt="" width="40" height="40">
+          <span class="brand__text"><b>Luna</b><span>Labs</span></span>
+        </a>
+        <p>Tu socio tecnológico para construir, automatizar y escalar con criterio.</p>
+        <span class="footer__tag">Logistics through guidance · Digital Evolution</span>
+      </div>
+
+      <div class="footer__cols">
+        <nav aria-label="Servicios">
+          <h4>Servicios</h4>
+          <ul>
+            <li><a href="#servicios">Software Studio &amp; App Dev</a></li>
+            <li><a href="#servicios">Automation &amp; AI Workflows</a></li>
+            <li><a href="#servicios">Tech &amp; AI Consulting</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Empresa">
+          <h4>Empresa</h4>
+          <ul>
+            <li><a href="#manifiesto">Manifiesto</a></li>
+            <li><a href="#pilares">Pilares</a></li>
+            <li><a href="#metodologia">Metodología</a></li>
+            <li><a href="#casos">Casos</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Recursos">
+          <h4>Recursos</h4>
+          <ul>
+            <li><a href="#contacto">Newsletter</a></li>
+            <li><a href="#producto">Panel de control</a></li>
+            <li><a href="#valor">Para startups</a></li>
+            <li><a href="#valor">Para empresas</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Contacto">
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="mailto:info.lunalabs@gmail.com">info.lunalabs@gmail.com</a></li>
+            <li><a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" target="_blank" rel="noopener" data-booking>Agenda una consultoría</a></li>
+            <li>Trabajo remoto · ES / EN</li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© 2026 LunaLabs. Todos los derechos reservados.</p>
+      <div class="social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="GitHub">Gh</a>
+        <a href="#" aria-label="X (Twitter)">X</a>
+        <a href="#" aria-label="Instagram">Ig</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ==========================================================================
+     MODAL DE AGENDAMIENTO: Google Calendar Appointment Scheduling
+     Todos los botones con [data-booking] abren este diálogo. El código del
+     iframe es el de Google Calendar tal cual; con loading="lazy" y el diálogo
+     cerrado, el navegador no lo descarga hasta que se abre.
+     ========================================================================== -->
+<dialog class="booking" id="booking" aria-labelledby="booking-title">
+  <div class="booking__head">
+    <div>
+      <h2 id="booking-title">Agenda tu consultoría</h2>
+      <p>Elige el día y la hora que mejor te funcionen. Recibirás la confirmación por correo.</p>
+    </div>
+    <button type="button" class="booking__close" id="bookingClose" aria-label="Cerrar agenda"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+  </div>
+  <div class="booking__body">
+    <!-- Google Calendar Appointment Scheduling begin -->
+    <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" style="border: 0" width="100%" height="600" frameborder="0" loading="lazy" title="Agenda de citas de LunaLabs"></iframe>
+    <!-- end Google Calendar Appointment Scheduling -->
+  </div>
+  <div class="booking__foot">¿No se ve el calendario? <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" target="_blank" rel="noopener">Ábrelo en una pestaña nueva</a> o escríbenos a <a href="mailto:info.lunalabs@gmail.com">info.lunalabs@gmail.com</a></div>
+</dialog>
+
+<!-- ==========================================================================
+     JAVASCRIPT: estrellas, navbar, menú móvil, reveal on scroll, formulario
+     ========================================================================== -->
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  root.classList.add('js');
+
+  /* --- Campo de estrellas con parpadeo --- */
+  var field = document.getElementById('stars');
+  var total = window.innerWidth < 640 ? 55 : 120;
+  var frag = document.createDocumentFragment();
+  for (var i = 0; i < total; i++) {
+    var s = document.createElement('i');
+    var r = Math.random();
+    var size = r > .93 ? 3 : r > .7 ? 2 : 1.4;
+    if (r > .93) s.className = 'big';
+    if (Math.random() > .93) s.className += ' gold';
+    s.style.cssText = 'left:' + (Math.random() * 100).toFixed(2) + '%;top:' + (Math.random() * 100).toFixed(2) + '%;' +
+      '--s:' + size + 'px;--o:' + (.35 + Math.random() * .6).toFixed(2) + ';' +
+      '--dur:' + (3 + Math.random() * 5).toFixed(1) + 's;--del:-' + (Math.random() * 8).toFixed(1) + 's';
+    frag.appendChild(s);
+  }
+  field.appendChild(frag);
+
+  /* --- Navbar: se oscurece al hacer scroll --- */
+  var nav = document.getElementById('nav');
+  function onScroll() { nav.classList.toggle('is-scrolled', window.scrollY > 24); }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* --- Menú hamburguesa --- */
+  var toggle = document.getElementById('navToggle');
+  function setMenu(open) {
+    nav.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  }
+  toggle.addEventListener('click', function () { setMenu(!nav.classList.contains('is-open')); });
+  document.querySelectorAll('#navPanel a').forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+  window.matchMedia('(min-width: 1024px)').addEventListener('change', function (e) { if (e.matches) setMenu(false); });
+
+  /* --- Fade-in + translateY al entrar en pantalla --- */
+  var items = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); }
+      });
+    }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+    items.forEach(function (el) { io.observe(el); });
+  } else {
+    items.forEach(function (el) { el.classList.add('is-visible'); });
+  }
+
+  /* --- Agendamiento: abre el calendario de Google en un modal --- */
+  var dlg = document.getElementById('booking');
+  function openBooking() {
+    dlg.showModal();
+    root.style.overflow = 'hidden';
+  }
+  document.querySelectorAll('[data-booking]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      if (typeof dlg.showModal !== 'function') return;   // sin <dialog>: se sigue el enlace normal (pestaña nueva)
+      e.preventDefault(); setMenu(false); openBooking();
+    });
+  });
+  document.getElementById('bookingClose').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });   // clic en el fondo
+  dlg.addEventListener('close', function () { root.style.overflow = ''; });
+
+  /* --- Navegación por secciones: transiciones de pantalla en pantalla (escritorio) --- */
+  var mqPaged = window.matchMedia('(min-width: 1024px) and (hover: hover) and (prefers-reduced-motion: no-preference)');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main > section, footer'));
+  var pager = document.getElementById('pager');
+  var dots = [];
+  var pagedOn = false, animating = false, lastWheel = 0, rafId = 0;
+
+  sections.forEach(function (sec) {          // puntos del indicador lateral
+    if (!sec.dataset.label) return;
+    var b = document.createElement('button');
+    b.type = 'button'; b.dataset.label = sec.dataset.label; b.setAttribute('aria-label', 'Ir a ' + sec.dataset.label);
+    b.addEventListener('click', function () { goTo(topOf(sec)); });
+    pager.appendChild(b); dots.push({ el: b, sec: sec });
+  });
+
+  function vh() { return window.innerHeight; }
+  function maxScroll() { return document.documentElement.scrollHeight - vh(); }
+  function topOf(el) { return el.id === 'inicio' ? 0 : el.getBoundingClientRect().top + window.scrollY; }
+  function clamp(y) { return Math.max(0, Math.min(Math.round(y), maxScroll())); }
+
+  // Paradas: el inicio de cada sección; si es más alta que la pantalla, varias paradas de una pantalla
+  function stops() {
+    var H = vh(), list = [];
+    sections.forEach(function (sec) {
+      var top = topOf(sec), eff = sec.offsetHeight - 80;         // 80px ≈ relleno inferior que no hace falta ver
+      if (eff <= H) { list.push(top); return; }
+      var n = Math.ceil((eff - H) / (H * .9));
+      for (var i = 0; i <= n; i++) list.push(top + (eff - H) * i / n);
+    });
+    list = list.map(clamp).sort(function (a, b) { return a - b; });
+    return list.filter(function (y, i) { return i === 0 || y - list[i - 1] > 8; });
+  }
+
+  function goTo(y) {                          // desplazamiento animado con easing
+    y = clamp(y);
+    var from = window.scrollY, dist = y - from;
+    if (Math.abs(dist) < 2) return;
+    if (!pagedOn) { window.scrollTo({ top: y, behavior: 'smooth' }); return; }
+    cancelAnimationFrame(rafId); animating = true;
+    var t0 = performance.now(), dur = Math.min(1100, Math.max(700, Math.abs(dist) * .7));
+    (function frame(now) {
+      var p = Math.min(1, (now - t0) / dur);
+      var e = p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;   // easeInOutCubic
+      window.scrollTo(0, from + dist * e);
+      if (p < 1) rafId = requestAnimationFrame(frame); else animating = false;
+    })(t0);
+  }
+
+  function pageBy(dir) {
+    var y = window.scrollY, list = stops(), t;
+    if (dir > 0) { for (var i = 0; i < list.length; i++) if (list[i] > y + 6) { t = list[i]; break; } }
+    else { for (var j = list.length - 1; j >= 0; j--) if (list[j] < y - 6) { t = list[j]; break; } }
+    if (t !== undefined) goTo(t);
+  }
+
+  window.addEventListener('wheel', function (e) {
+    if (!pagedOn || dlg.open || e.ctrlKey) return;
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    var now = performance.now(), idle = now - lastWheel;
+    lastWheel = now;
+    if (animating || idle < 140 || Math.abs(e.deltaY) < 4) return;    // ignora la inercia del gesto anterior
+    pageBy(e.deltaY > 0 ? 1 : -1);
+  }, { passive: false });
+
+  window.addEventListener('keydown', function (e) {
+    if (!pagedOn || dlg.open || e.altKey || e.ctrlKey || e.metaKey) return;
+    var t = e.target, tag = t && t.tagName;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(tag) || (t && t.isContentEditable)) return;
+    var k = e.key;
+    if (k === 'Home') { e.preventDefault(); goTo(0); return; }
+    if (k === 'End') { e.preventDefault(); goTo(maxScroll()); return; }
+    var dir = (k === 'ArrowDown' || k === 'PageDown') ? 1 : (k === 'ArrowUp' || k === 'PageUp') ? -1 : (k === ' ' && tag === 'BODY') ? (e.shiftKey ? -1 : 1) : 0;
+    if (!dir) return;
+    e.preventDefault();
+    if (!animating) pageBy(dir);
+  });
+
+  // Enlaces internos (#servicios, #contacto…) usan la misma transición
+  document.querySelectorAll('a[href^="#"]:not([data-booking])').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href').slice(1), el = id && document.getElementById(id);
+      if (!el || !pagedOn) return;
+      e.preventDefault(); goTo(topOf(el));
+    });
+  });
+
+  // Punto activo del indicador lateral
+  var ticking = false;
+  function markActive() {
+    ticking = false;
+    var line = window.scrollY + vh() * .4, cur = 0;
+    dots.forEach(function (d, i) { if (topOf(d.sec) <= line) cur = i; });
+    if (window.scrollY >= maxScroll() - 4) cur = dots.length - 1;
+    dots.forEach(function (d, i) { d.el.classList.toggle('is-active', i === cur); });
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(markActive); } }, { passive: true });
+  window.addEventListener('resize', markActive);
+
+  function syncPaged() { pagedOn = mqPaged.matches; root.classList.toggle('paged', pagedOn); markActive(); }
+  mqPaged.addEventListener('change', syncPaged);
+  syncPaged();
+
+  /* --- Newsletter opcional: abre el correo del visitante ya redactado hacia info.lunalabs@gmail.com --- */
+  var form = document.getElementById('newsletter');
+  var msg = document.getElementById('nl-msg');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var input = document.getElementById('nl-email');
+    var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+    msg.style.color = ok ? '' : '#FF8A80';
+    msg.textContent = ok ? 'Abriendo tu correo para confirmar la suscripción…' : 'Escribe un correo válido para suscribirte.';
+    if (ok) {
+      window.location.href = 'mailto:info.lunalabs@gmail.com?subject=' + encodeURIComponent('Suscripción al newsletter') +
+        '&body=' + encodeURIComponent('Hola LunaLabs, quiero recibir sus guías de escalabilidad y automatización en: ' + input.value.trim());
+      form.reset();
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LunaLabs — Software studio, automatización con IA y consultoría tecnológica</title>
-<meta name="description" content="LunaLabs es un software studio que construye aplicaciones escalables, automatiza procesos con IA y te acompaña como socio tecnológico en tu evolución digital.">
+<title>LunaLABS — Software studio, automatización con IA y consultoría tecnológica</title>
+<meta name="description" content="LunaLABS es un software studio que construye aplicaciones escalables, automatiza procesos con IA y te acompaña como socio tecnológico en tu evolución digital.">
 <meta name="theme-color" content="#0A0E27">
 
 <!-- Favicon: luna creciente + estrella (SVG embebido) -->
@@ -176,9 +176,9 @@ section { scroll-margin-top: calc(var(--nav-h) - 8px); }
    ========================================================================== */
 .brand { display: inline-flex; align-items: center; gap: .6rem; }
 .brand__mark { width: 40px; height: 40px; object-fit: contain; /* el PNG es azul oscuro: halo claro para que se lea sobre el cielo nocturno */ filter: drop-shadow(0 0 1px rgba(255, 255, 255, .55)) drop-shadow(0 0 10px rgba(221, 225, 243, .35)); }
-.brand__text { font-family: var(--font-head); font-size: 1.25rem; letter-spacing: .06em; text-transform: uppercase; line-height: 1; }
+.brand__text { font-family: var(--font-head); font-size: 1.3rem; letter-spacing: .02em; line-height: 1; }
 .brand__text b { font-weight: 800; background: linear-gradient(100deg, #5C6BC0, #E8EAF6); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.brand__text span { font-weight: 300; color: #ECEFF1; }
+.brand__text span { font-weight: 400; letter-spacing: .06em; color: #ECEFF1; }
 
 /* ==========================================================================
    5. NAVBAR
@@ -298,7 +298,7 @@ section { scroll-margin-top: calc(var(--nav-h) - 8px); }
 .tree { display: grid; justify-items: center; }
 .tree__root { display: inline-flex; align-items: center; gap: .9rem; padding: 14px 30px 14px 18px; border-radius: 999px; background: linear-gradient(160deg, rgba(26, 35, 126, .75), rgba(14, 19, 56, .9)); border: 1px solid rgba(253, 216, 53, .55); box-shadow: 0 0 0 6px rgba(253, 216, 53, .05), 0 0 50px rgba(253, 216, 53, .18); position: relative; z-index: 2; }
 .tree__root .brand__mark { width: 46px; height: 46px; }
-.tree__root b { font-family: var(--font-head); font-weight: 800; letter-spacing: .14em; font-size: 1.05rem; color: var(--color-white); }
+.tree__root b { font-family: var(--font-head); font-weight: 800; letter-spacing: .03em; font-size: 1.2rem; color: var(--color-white); }
 .tree__lines { display: none; width: 100%; height: 110px; margin-top: -2px; }
 .tree__lines path { fill: none; stroke: var(--color-accent); stroke-opacity: .7; stroke-width: 1.5; stroke-dasharray: 4 6; animation: flow 1.6s linear infinite; vector-effect: non-scaling-stroke; }
 .tree__cols { display: grid; gap: 52px; width: 100%; margin-top: 40px; }
@@ -495,10 +495,19 @@ section { scroll-margin-top: calc(var(--nav-h) - 8px); }
 .footer li a:hover { color: var(--color-accent); }
 .footer__bottom { display: flex; flex-direction: column; gap: 18px; align-items: flex-start; margin-top: clamp(40px, 6vw, 64px); padding-block: 24px; border-top: 1px solid var(--line); font-size: .84rem; }
 .social { display: flex; gap: 10px; }
-.social a { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line-strong); font-family: var(--font-head); font-weight: 700; font-size: .78rem; color: var(--silver); transition: border-color .25s, color .25s, box-shadow .25s, transform .25s; }
+.social a { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line-strong); color: var(--silver); transition: border-color .25s, color .25s, box-shadow .25s, transform .25s; }
+.social .ico { width: 19px; height: 19px; stroke-width: 1.7; }
 .social a:hover { border-color: var(--color-accent); color: var(--color-accent); box-shadow: 0 0 20px rgba(253, 216, 53, .22); transform: translateY(-2px); }
 @media (min-width: 640px) { .footer__cols { grid-template-columns: repeat(4, 1fr); } .footer__bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
 @media (min-width: 1024px) { .footer__grid { grid-template-columns: 1.1fr 2fr; gap: 64px; } }
+
+/* Botón flotante de WhatsApp (mensaje predeterminado) */
+.wa-float { position: fixed; right: 18px; bottom: 18px; z-index: 95; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 50%; color: var(--color-accent); background: rgba(14, 19, 56, .92); border: 1px solid rgba(253, 216, 53, .6); box-shadow: 0 10px 30px rgba(3, 5, 20, .6), 0 0 24px rgba(253, 216, 53, .18); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: transform .25s ease, box-shadow .3s ease, background .3s ease; }
+.wa-float .ico { width: 26px; height: 26px; stroke-width: 1.7; }
+.wa-float:hover { transform: translateY(-3px); background: var(--color-accent); color: #0A0E27; box-shadow: 0 0 0 1px var(--color-accent), 0 12px 36px var(--glow-gold); }
+.wa-float::after { content: "Escríbenos por WhatsApp"; position: absolute; right: 66px; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: .78rem; padding: 6px 12px; border-radius: 999px; background: rgba(10, 14, 39, .95); border: 1px solid var(--line-strong); color: var(--ink); opacity: 0; pointer-events: none; transition: opacity .2s; }
+.wa-float:hover::after, .wa-float:focus-visible::after { opacity: 1; }
+@media (min-width: 1024px) { .wa-float { right: 24px; bottom: 24px; } }
 
 /* ==========================================================================
    15a. NAVEGACIÓN POR SECCIONES (transiciones "de pantalla en pantalla")
@@ -596,9 +605,15 @@ html.paged .pager { display: flex; }
   <symbol id="i-loop" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-14 5.3M4 12a8 8 0 0 1 14-5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></symbol>
   <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12c0-4 3-6.5 8-6.5 0 4-2.5 6.5-8 6.5z"/><path d="M12 15c0-3-2.2-5-6.5-5 0 3.2 2 5 6.5 5z"/></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3.5"/><path d="M8 10.5V16M8 7.8v.01M12 16v-5.5M12 12.8c0-1.4 1-2.3 2.3-2.3 1.4 0 2.2.9 2.2 2.4V16"/></symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M3.5 20.5l1.3-4.3A8.5 8.5 0 1 1 8 19.3z"/><path d="M9.2 8.6c.2 2.7 2.7 5.2 5.6 5.8l1.2-1.4-2-1-.9.8c-.9-.4-1.7-1.2-2.1-2.1l.8-.9-1-2z"/></symbol>
   <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
   <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
 </svg>
+
+<!-- WhatsApp: mensaje de contacto predeterminado (+51 994 422 549) -->
+<a class="wa-float" href="https://wa.me/51994422549?text=Hola%20LunaLABS%2C%20vi%20su%20sitio%20web%20y%20me%20gustar%C3%ADa%20conversar%20sobre%20un%20proyecto.%20%C2%BFPodemos%20coordinar%20una%20llamada%3F" target="_blank" rel="noopener" aria-label="Escribir a LunaLABS por WhatsApp"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg></a>
 
 <!-- Indicador lateral de secciones (lo genera el script en escritorio) -->
 <nav class="pager" id="pager" aria-label="Secciones"></nav>
@@ -611,9 +626,9 @@ html.paged .pager { display: flex; }
      ========================================================================== -->
 <header class="nav" id="nav">
   <div class="container nav__inner">
-    <a href="#inicio" class="brand" aria-label="LunaLabs — inicio">
+    <a href="#inicio" class="brand" aria-label="LunaLABS — inicio">
       <img class="brand__mark" src="Lunalabs-logo.png" alt="" width="40" height="40">
-      <span class="brand__text"><b>Luna</b><span>Labs</span></span>
+      <span class="brand__text"><b>Luna</b><span>LABS</span></span>
     </a>
 
     <nav class="nav__links" aria-label="Principal">
@@ -804,7 +819,7 @@ html.paged .pager { display: flex; }
       <!-- Nodo central -->
       <div class="tree__root reveal">
         <img class="brand__mark" src="Lunalabs-logo.png" alt="" width="40" height="40">
-        <b>LUNALABS</b>
+        <b>LunaLABS</b>
       </div>
 
       <!-- Líneas curvas al nodo central (escritorio) -->
@@ -927,11 +942,11 @@ html.paged .pager { display: flex; }
     </ul>
 
     <!-- Dashboard de ejemplo (contenido ilustrativo) -->
-    <div class="mock reveal" role="img" aria-label="Ilustración de un panel de automatización de LunaLabs en escritorio y móvil">
+    <div class="mock reveal" role="img" aria-label="Ilustración de un panel de automatización de LunaLABS en escritorio y móvil">
       <div class="mock__glow"></div>
 
       <div class="card browser">
-        <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">app.lunalabs.io / automatizaciones</span></div>
+        <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">LunaLABS / Automatizaciones</span></div>
         <div class="dash">
           <aside class="dash__side" aria-hidden="true">
             <img class="brand__mark" src="Lunalabs-logo.png" alt="" width="40" height="40">
@@ -957,7 +972,7 @@ html.paged .pager { display: flex; }
             <div class="dash__grid">
               <div class="panel">
                 <div class="panel__head">Tareas automatizadas
-                  <span class="legend"><span><i></i>Con LunaLabs</span><span><i class="s"></i>Antes</span></span>
+                  <span class="legend"><span><i></i>Con LunaLABS</span><span><i class="s"></i>Antes</span></span>
                 </div>
                 <svg class="chart" viewBox="0 0 400 170" aria-hidden="true">
                   <g class="grid"><line x1="0" y1="30" x2="400" y2="30"/><line x1="0" y1="70" x2="400" y2="70"/><line x1="0" y1="110" x2="400" y2="110"/><line x1="0" y1="150" x2="400" y2="150"/></g>
@@ -1017,7 +1032,7 @@ html.paged .pager { display: flex; }
       <h2 class="section-title reveal" style="--d:.08s">Equipos que ya avanzan con nosotros</h2>
     </div>
 
-    <p class="trust__label reveal">Empresas que confían en LunaLabs</p>
+    <p class="trust__label reveal">Empresas que confían en LunaLABS</p>
     <div class="logos reveal" aria-label="Logos de clientes (ejemplo)">
       <div class="logo-ph"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Orbita</div>
       <div class="logo-ph"><svg viewBox="0 0 24 24"><path d="M12 3 21 20H3z"/></svg>Kepler</div>
@@ -1074,6 +1089,7 @@ html.paged .pager { display: flex; }
         <p class="lead">Cuéntanos dónde estás y hacia dónde quieres llegar. En una primera conversación te devolvemos claridad: qué hacer primero y cómo.</p>
         <div class="cta__actions">
           <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" target="_blank" rel="noopener" data-booking class="btn btn--gold">Agenda una consultoría <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a href="https://wa.me/51994422549?text=Hola%20LunaLABS%2C%20vi%20su%20sitio%20web%20y%20me%20gustar%C3%ADa%20conversar%20sobre%20un%20proyecto.%20%C2%BFPodemos%20coordinar%20una%20llamada%3F" target="_blank" rel="noopener" class="btn btn--ghost"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg>WhatsApp</a>
           <a href="mailto:info.lunalabs@gmail.com?subject=Quiero%20conversar%20sobre%20mi%20proyecto" class="btn btn--ghost"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg>info.lunalabs@gmail.com</a>
         </div>
 
@@ -1095,15 +1111,15 @@ html.paged .pager { display: flex; }
 
 <!-- ==========================================================================
      11. FOOTER
-     (Las redes sociales son placeholders: actualiza los enlaces con los reales.)
+     (Redes: Instagram y LinkedIn de LunaLABS. WhatsApp con mensaje predeterminado.)
      ========================================================================== -->
 <footer class="footer">
   <div class="container">
     <div class="footer__grid">
       <div class="footer__brand">
-        <a href="#inicio" class="brand" aria-label="LunaLabs — inicio">
+        <a href="#inicio" class="brand" aria-label="LunaLABS — inicio">
           <img class="brand__mark" src="Lunalabs-logo.png" alt="" width="40" height="40">
-          <span class="brand__text"><b>Luna</b><span>Labs</span></span>
+          <span class="brand__text"><b>Luna</b><span>LABS</span></span>
         </a>
         <p>Tu socio tecnológico para construir, automatizar y escalar con criterio.</p>
         <span class="footer__tag">Logistics through guidance · Digital Evolution</span>
@@ -1141,6 +1157,7 @@ html.paged .pager { display: flex; }
           <ul>
             <li><a href="mailto:info.lunalabs@gmail.com">info.lunalabs@gmail.com</a></li>
             <li><a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" target="_blank" rel="noopener" data-booking>Agenda una consultoría</a></li>
+            <li><a href="https://wa.me/51994422549?text=Hola%20LunaLABS%2C%20vi%20su%20sitio%20web%20y%20me%20gustar%C3%ADa%20conversar%20sobre%20un%20proyecto.%20%C2%BFPodemos%20coordinar%20una%20llamada%3F" target="_blank" rel="noopener">WhatsApp +51 994 422 549</a></li>
             <li>Trabajo remoto · ES / EN</li>
           </ul>
         </nav>
@@ -1148,12 +1165,11 @@ html.paged .pager { display: flex; }
     </div>
 
     <div class="footer__bottom">
-      <p>© 2026 LunaLabs. Todos los derechos reservados.</p>
+      <p>© 2026 LunaLABS. Todos los derechos reservados.</p>
       <div class="social">
-        <a href="#" aria-label="LinkedIn">in</a>
-        <a href="#" aria-label="GitHub">Gh</a>
-        <a href="#" aria-label="X (Twitter)">X</a>
-        <a href="#" aria-label="Instagram">Ig</a>
+        <a href="https://www.instagram.com/lunalabsstudio/" target="_blank" rel="noopener" aria-label="Instagram de LunaLABS"><svg class="ico" aria-hidden="true"><use href="#i-instagram"/></svg></a>
+        <a href="https://www.linkedin.com/company/lunalabs-studio" target="_blank" rel="noopener" aria-label="LinkedIn de LunaLABS"><svg class="ico" aria-hidden="true"><use href="#i-linkedin"/></svg></a>
+        <a href="https://wa.me/51994422549?text=Hola%20LunaLABS%2C%20vi%20su%20sitio%20web%20y%20me%20gustar%C3%ADa%20conversar%20sobre%20un%20proyecto.%20%C2%BFPodemos%20coordinar%20una%20llamada%3F" target="_blank" rel="noopener" aria-label="WhatsApp de LunaLABS"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp"/></svg></a>
       </div>
     </div>
   </div>
@@ -1175,7 +1191,7 @@ html.paged .pager { display: flex; }
   </div>
   <div class="booking__body">
     <!-- Google Calendar Appointment Scheduling begin -->
-    <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" style="border: 0" width="100%" height="600" frameborder="0" loading="lazy" title="Agenda de citas de LunaLabs"></iframe>
+    <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" style="border: 0" width="100%" height="600" frameborder="0" loading="lazy" title="Agenda de citas de LunaLABS"></iframe>
     <!-- end Google Calendar Appointment Scheduling -->
   </div>
   <div class="booking__foot">¿No se ve el calendario? <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2LWMFB3g3_lNQ2ZuqBMeVXa7EAPyH0qRrtwTHzVEcr2GKhNqw94GO6WhNmzl1RcFMjvSV5IMX5?gv=true" target="_blank" rel="noopener">Ábrelo en una pestaña nueva</a> o escríbenos a <a href="mailto:info.lunalabs@gmail.com">info.lunalabs@gmail.com</a></div>
@@ -1368,7 +1384,7 @@ html.paged .pager { display: flex; }
     msg.textContent = ok ? 'Abriendo tu correo para confirmar la suscripción…' : 'Escribe un correo válido para suscribirte.';
     if (ok) {
       window.location.href = 'mailto:info.lunalabs@gmail.com?subject=' + encodeURIComponent('Suscripción al newsletter') +
-        '&body=' + encodeURIComponent('Hola LunaLabs, quiero recibir sus guías de escalabilidad y automatización en: ' + input.value.trim());
+        '&body=' + encodeURIComponent('Hola LunaLABS, quiero recibir sus guías de escalabilidad y automatización en: ' + input.value.trim());
       form.reset();
     }
   });
